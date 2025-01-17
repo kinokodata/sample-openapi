@@ -1,0 +1,47 @@
+services:
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: "swagger-editor"
+    ports:
+      - "18001:8080"
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui"
+    ports:
+      - "18002:8080"
+    volumes:
+      - ./api/openapi.yml:/openapi.yml
+    environment:
+      SWAGGER_JSON: /openapi.yml
+
+  api-mock:
+    image: stoplight/prism:3
+    container_name: "api-mock"
+    ports:
+      - "18003:4010"
+    command: mock -h 0.0.0.0 /openapi.yml
+    volumes:
+      - ./api/openapi.yml:/openapi.yml
+
+  openapi-docgen:
+    image: node:20
+    volumes:
+      - ./api:/api
+      - ./output:/output
+    working_dir: /api
+    command: >
+      sh -c "
+        npx --yes @redocly/cli build-docs openapi.yml &&
+        mkdir -p /output/docs &&
+        mv redoc-static.html /output/docs/index.html
+      "
+
+  api-codegen:
+    image: openapitools/openapi-generator-cli
+    volumes:
+      - ./api:/api
+      - ./output/generated-server:/src
+    command: generate -i /api/openapi.yml -g typescript-node -o /src --additional-properties=framework=express-server
+    environment:
+      JAVA_OPTS: "-Dlog.level=error"
