@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserRequest'
+              $ref: '#/components/schemas/UserCreateRequest'
       responses:
         '201':
           description: ユーザーの作成が成功
@@ -232,7 +232,7 @@ components:
           type: string
           description: 商品カテゴリの説明
 
-    CreateUserRequest:
+    UserCreateRequest:
       type: object
       required:
         - name
