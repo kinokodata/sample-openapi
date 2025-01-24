@@ -81,6 +81,126 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /product-categories:
+    get:
+      summary: 商品カテゴリ一覧の取得
+      description: 登録されている全商品カテゴリの一覧を返します
+      responses:
+        '200':
+          description: 正常に商品カテゴリ一覧を取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoriesResponse'
+
+    post:
+      summary: 新規商品カテゴリの作成
+      description: 新しい商品カテゴリを登録します
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductCategoryRequest'
+      responses:
+        '201':
+          description: 商品カテゴリの作成が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoryCreatedResponse'
+        '400':
+          description: 不正なリクエストデータ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /product-categories/{id}:
+    get:
+      summary: 特定の商品カテゴリの取得
+      description: 指定されたIDの商品カテゴリ情報を取得します
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 商品カテゴリID
+      responses:
+        '200':
+          description: 商品カテゴリの取得が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoryResponse'
+        '404':
+          description: 指定された商品カテゴリが見つかりません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      summary: 商品カテゴリの更新
+      description: 商品カテゴリの情報を更新します
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 更新する商品カテゴリのID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductCategoryRequest'
+      responses:
+        '200':
+          description: 商品カテゴリの更新が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoryUpdatedResponse'
+        '400':
+          description: 不正なリクエストデータ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 指定された商品カテゴリが見つかりません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: 商品カテゴリの削除
+      description: 商品カテゴリを削除します
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: 商品カテゴリID
+      responses:
+        '200':
+          description: 商品カテゴリの削除が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoryDeletedResponse'
+        '404':
+          description: 指定された商品カテゴリが見つかりません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
     User:
@@ -96,6 +216,22 @@ components:
           type: string
           description: ユーザーの名前
 
+    ProductCategory:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          description: 商品カテゴリID
+        name:
+          type: string
+          description: 商品カテゴリの名前
+        description:
+          type: string
+          description: 商品カテゴリの説明
+
     CreateUserRequest:
       type: object
       required:
@@ -104,6 +240,28 @@ components:
         name:
           type: string
           description: 登録するユーザーの名前
+
+    CreateProductCategoryRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: 登録する商品カテゴリの名前
+        description:
+          type: string
+          description: 登録する商品カテゴリの説明
+
+    UpdateProductCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 更新データ（商品カテゴリの名前）
+        description:
+          type: string
+          description: 更新データ（商品カテゴリの説明）
 
     WelcomeResponse:
       type: object
@@ -134,6 +292,45 @@ components:
           example: "ユーザーの作成が完了しました"
         data:
           $ref: '#/components/schemas/User'
+
+    ProductCategoriesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCategory'
+
+    ProductCategoryResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProductCategory'
+
+    ProductCategoryCreatedResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "商品カテゴリの作成が完了しました"
+        data:
+          $ref: '#/components/schemas/ProductCategory'
+
+    ProductCategoryUpdatedResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "商品カテゴリの更新が完了しました"
+        data:
+          $ref: '#/components/schemas/ProductCategory'
+
+    ProductCategoryDeletedResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "商品カテゴリの削除が完了しました"
 
     ErrorResponse:
       type: object
