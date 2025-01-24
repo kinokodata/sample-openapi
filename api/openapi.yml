@@ -101,7 +101,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateProductCategoryRequest'
+              $ref: '#/components/schemas/ProductCategoryCreateRequest'
       responses:
         '201':
           description: 商品カテゴリの作成が成功
@@ -156,7 +156,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateProductCategoryRequest'
+              $ref: '#/components/schemas/ProductCategoryUpdateRequest'
       responses:
         '200':
           description: 商品カテゴリの更新が成功
@@ -241,7 +241,7 @@ components:
           type: string
           description: 登録するユーザーの名前
 
-    CreateProductCategoryRequest:
+    ProductCategoryCreateRequest:
       type: object
       required:
         - name
@@ -253,7 +253,7 @@ components:
           type: string
           description: 登録する商品カテゴリの説明
 
-    UpdateProductCategoryRequest:
+    ProductCategoryUpdateRequest:
       type: object
       properties:
         name:
