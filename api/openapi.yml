@@ -321,7 +321,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /daily-sales:
+  /sales:
     get:
       summary: 売上データの取得
       description: 期間を指定して売上データを取得します
@@ -366,7 +366,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DailySalesResponse'
+                $ref: '#/components/schemas/SalesResponse'
 
   /weather:
     get:
@@ -459,7 +459,7 @@ components:
           format: date-time
           description: 作成日時
 
-    DailySalesAggregate:
+    SalesAggregate:
       type: object
       required:
         - date
@@ -682,13 +682,13 @@ components:
         data:
           $ref: '#/components/schemas/Product'
 
-    DailySalesResponse:
+    SalesResponse:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/DailySalesAggregate'
+            $ref: '#/components/schemas/SalesAggregate'
 
     WeatherResponse:
       type: object
