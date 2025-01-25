@@ -321,6 +321,87 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /daily-sales:
+    get:
+      summary: 売上データの取得
+      description: 期間を指定して売上データを取得します
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: 取得開始日 (YYYY-MM-DD)
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: 取得終了日 (YYYY-MM-DD)
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 商品カテゴリID（指定しない場合は全カテゴリー）
+        - name: groupBy
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ day, week ]
+          description: 集計単位（日次/週次）
+        - name: aggregationType
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ sum, average ]
+          description: 集計方法（合計値/平均値）
+      responses:
+        '200':
+          description: 売上データの取得が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailySalesResponse'
+
+  /weather:
+    get:
+      summary: 気象データの取得
+      description: 期間を指定して気象データを取得します
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: 取得開始日 (YYYY-MM-DD)
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: 取得終了日 (YYYY-MM-DD)
+        - name: groupBy
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ day, week ]
+          description: 集計単位（日次/週次）
+      responses:
+        '200':
+          description: 気象データの取得が成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeatherResponse'
+
 components:
   schemas:
     User:
@@ -377,6 +458,54 @@ components:
           type: string
           format: date-time
           description: 作成日時
+
+    DailySalesAggregate:
+      type: object
+      required:
+        - date
+        - quantity
+        - totalAmount
+        - categoryId
+        - categoryName
+      properties:
+        date:
+          type: string
+          format: date
+          description: 売上日（週次の場合は週の開始日）
+        quantity:
+          type: integer
+          description: 販売数量（集計方法により合計または平均）
+        totalAmount:
+          type: integer
+          description: 売上金額（集計方法により合計または平均）
+        categoryId:
+          type: integer
+          description: カテゴリID（カテゴリ指定時のみ）
+        categoryName:
+          type: string
+          description: カテゴリ名（カテゴリ指定時のみ）
+
+    WeatherAggregate:
+      type: object
+      required:
+        - date
+        - weatherConditions
+        - averageMaxTemperature
+      properties:
+        date:
+          type: string
+          format: date
+          description: 日付（週次の場合は週の開始日）
+        weatherConditions:
+          type: array
+          items:
+            type: string
+            enum: [ 晴れ, 曇り, 雨 ]
+          description: 期間中の天候一覧
+        averageMaxTemperature:
+          type: number
+          format: float
+          description: 最高気温（週次の場合は平均値）
 
     UserCreateRequest:
       type: object
@@ -552,6 +681,22 @@ components:
           example: "商品の削除が完了しました"
         data:
           $ref: '#/components/schemas/Product'
+
+    DailySalesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailySalesAggregate'
+
+    WeatherResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherAggregate'
 
     ErrorResponse:
       type: object
