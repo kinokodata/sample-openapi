@@ -6,7 +6,7 @@ info:
 
 servers:
   - url: http://localhost:23000
-    description: 開発用サーバー
+    description: 開発用サーバ
 
 paths:
   /:
@@ -14,24 +14,24 @@ paths:
       summary: ウェルカムメッセージの取得
       description: APIのウェルカムメッセージを返します
       responses:
-        '200':
+        "200":
           description: 正常にメッセージを取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WelcomeResponse'
+                $ref: "#/components/schemas/WelcomeResponse"
 
   /users:
     get:
       summary: ユーザー一覧の取得
       description: 登録されている全ユーザーの一覧を返します
       responses:
-        '200':
+        "200":
           description: 正常にユーザー一覧を取得
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsersResponse'
+                $ref: "#/components/schemas/UsersResponse"
 
     post:
       summary: 新規ユーザーの作成
@@ -41,20 +41,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserCreateRequest'
+              $ref: "#/components/schemas/UserCreateRequest"
       responses:
-        '201':
+        "201":
           description: ユーザーの作成が成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserCreatedResponse'
-        '400':
+                $ref: "#/components/schemas/UserCreatedResponse"
+        "400":
           description: 不正なリクエストデータ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /users/{id}:
     get:
@@ -68,18 +68,18 @@ paths:
             type: integer
           description: ユーザーID
       responses:
-        '200':
+        "200":
           description: ユーザーの取得が成功
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
-        '404':
+                $ref: "#/components/schemas/UserResponse"
+        "404":
           description: 指定されたユーザーが見つかりません
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
 components:
   schemas:
@@ -118,13 +118,13 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
 
     UserResponse:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
 
     UserCreatedResponse:
       type: object
@@ -133,7 +133,7 @@ components:
           type: string
           example: "ユーザーの作成が完了しました"
         data:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
 
     ErrorResponse:
       type: object
