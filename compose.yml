@@ -26,6 +26,7 @@ services:
 
   openapi-docgen:
     image: node:20
+    container_name: "openapi-docgen"
     volumes:
       - ./api:/api
       - ./output:/output
@@ -37,8 +38,9 @@ services:
         mv redoc-static.html /output/docs/index.html
       "
 
-  api-codegen:
+  openapi-codegen:
     image: openapitools/openapi-generator-cli
+    container_name: "openapi-codegen"
     volumes:
       - ./api:/api
       - ./output/generated-server:/src
